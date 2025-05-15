@@ -1,33 +1,59 @@
-import { useState, useEffect, use } from 'react';
-import { Text, View, StyleSheet, SafeAreaView } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Link, useRouter } from 'expo-router';
+import { useEffect, useState } from 'react';
+import { KeyboardAvoidingView, SafeAreaView, StyleSheet, Text, View } from "react-native";
 
 export default function Header () {
+  const [token, setToken] = useState('')
+
   const router = useRouter()
 
-  function logout () {
-    if (localStorage.getItem("token") != null){
-      localStorage.removeItem('token')
-      router.navigate('/')
+  const logout = async () => {
+    try {
+      const value = await AsyncStorage.getItem('token');
+      if (value !== null) {
+        await AsyncStorage.removeItem('token')
+      }
+    } catch (e) {
+      console.error(e)
     }
   }
 
+  const update = async () => {
+    try {
+      const value = await AsyncStorage.getItem('token');
+      if (value != null) {
+        setToken(value)
+      } else {
+        setToken('')
+      }
+    } catch (e) {
+      console.error(e)
+    }
+  }
+ 
+  useEffect (() => {
+    update
+  }, [token])
+
   return(
     <SafeAreaView>
-      <View style={styles.header}>
-        <Link style={styles.header_text} href={'/'}> Random Forum </Link>
-        {localStorage.getItem("token") === null ? ( 
-          <View style={styles.button_block}>
-            <Link style={styles.header_button} href={'/login'}> Login </Link>
-            <Link style={styles.header_button} href={'/signup'}> Signup </Link>
-          </View>
-        ) : (
-          <View style={styles.button_block}>
-            <Text style={styles.header_button}> {localStorage.getItem("token")} </Text>
-            <Text style={styles.header_button} onPress={() => logout()}> Logout </Text>
-          </View>
-        )}
-      </View>
+      <KeyboardAvoidingView>
+        <View style={styles.header}>
+          <Link style={styles.header_text} href={'/'}> Random Forum </Link>
+          {(token === '') ? ( 
+            <View style={styles.button_block}>
+              <Link style={styles.header_button} href={'/login'}> Login </Link>
+              <Link style={styles.header_button} href={'/signup'}> Signup </Link>
+            </View>
+          ) : (
+            <View style={styles.button_block}>
+              <Text style={styles.header_button}> {token} </Text>
+              <Text style={styles.header_button} onPress={logout}> Logout </Text>
+            </View>
+          )}
+        </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   )
 }
@@ -40,6 +66,8 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderBottomWidth: 1,
     borderBottomColor: 'black',
+    borderTopWidth: 1,
+    borderTopColor: 'black',
     marginBottom: 5,
     alignItems: 'center',
     justifyContent: 'space-between',

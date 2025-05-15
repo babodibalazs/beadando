@@ -1,7 +1,7 @@
-import React from 'react';
-import { useState, useEffect } from 'react';
-import { Text, View, Button, TextInput, StyleSheet, KeyboardAvoidingView, SafeAreaView } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
+import React, { useState } from 'react';
+import { Button, KeyboardAvoidingView, SafeAreaView, StyleSheet, Text, TextInput, View } from "react-native";
 
 import Header from './components/Header';
 
@@ -10,17 +10,24 @@ export default function Login() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
 
-  function login () {
-    const user = localStorage.getItem(userName)
+  const router = useRouter()
 
-    if (user != null){
-      setUserName('')
-      setPassword('')
-      setError('')
-      localStorage.setItem('token', userName)
-     } else {
-       setError("Rossz adatok")
-     }
+  const login = async () => {
+    const user = await AsyncStorage.getItem(userName);
+
+    try {
+      if (user != null){
+        setUserName('')
+        setPassword('')
+        setError('')
+        await AsyncStorage.setItem('token', userName)
+        router.navigate('/')
+      } else {
+        setError("Rossz adatok")
+      }
+    } catch (e) {
+      console.error(e)
+    }
   }
   
   return (
@@ -37,7 +44,7 @@ export default function Login() {
             <TextInput style={styles.input} value={password} onChangeText={(t) => setPassword(t)} />
           </View>
           <View style={styles.buttons}>
-            <Button onPress={() => login()} title='Login' />
+            <Button onPress={login} title='Login' />
           </View>
           <Text>{error}</Text>
         </View>
@@ -45,7 +52,7 @@ export default function Login() {
     </SafeAreaView>
   );
 }
-  
+
 const styles = StyleSheet.create({
   main: {
     flex: 1,

@@ -1,24 +1,33 @@
-import React from 'react';
-import { useState, useEffect } from 'react';
-import { Text, View, Button, TextInput, StyleSheet, KeyboardAvoidingView, SafeAreaView } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
+import React, { useState } from 'react';
+import { Button, KeyboardAvoidingView, SafeAreaView, StyleSheet, Text, TextInput, View } from "react-native";
 
 import Header from './components/Header';
 
-export default function Login() {
+export default function Signup() {
   const [userName, setUserName] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
-  
-  function signup () {
-    const user = localStorage.getItem(userName)
 
-    if (user === null){
-      localStorage.setItem(userName, password)
-      localStorage.setItem('token', userName)
-      setError('')
-    } else {
-      setError("Ez a felhasználó már létezik")
+  const router = useRouter()
+  
+  const signup = async () => {
+    const user = await AsyncStorage.getItem(userName);
+
+    try {
+      if (user === null){
+        setUserName('')
+        setPassword('')
+        setError('')
+        await AsyncStorage.setItem(userName, password)
+        await AsyncStorage.setItem('token', userName)
+        router.navigate('/')
+      } else {
+        setError("Ez a felhasználó már létezik")
+      }
+    } catch (e) {
+      console.error(e)
     }
   }
 
@@ -36,7 +45,7 @@ export default function Login() {
             <TextInput style={styles.input} value={password} onChangeText={(t) => setPassword(t)} />
           </View>
           <View style={styles.buttons}>
-            <Button onPress={() => signup()} title='Signup' />
+            <Button onPress={signup} title='Signup' />
           </View>
           <Text>{error}</Text>
         </View>
