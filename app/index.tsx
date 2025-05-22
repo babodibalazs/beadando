@@ -1,3 +1,4 @@
+import Constants from "expo-constants";
 import { useEffect, useState } from "react";
 import { KeyboardAvoidingView, SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
 
@@ -9,7 +10,7 @@ export default function Index() {
   const [posts, setPosts] = useState({})
 
   useEffect(() => {
-    setPosts(posts)
+    setPosts(Constants.manifest)
   }, [posts])
 
   return(
