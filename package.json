@@ -17,6 +17,7 @@
     "@react-navigation/bottom-tabs": "^7.3.10",
     "@react-navigation/elements": "^2.3.8",
     "@react-navigation/native": "^7.1.6",
+    "dotenv": "^16.5.0",
     "expo": "~53.0.9",
     "expo-blur": "~14.1.4",
     "expo-constants": "~17.1.6",
@@ -30,7 +31,8 @@
     "expo-symbols": "~0.4.4",
     "expo-system-ui": "~5.0.7",
     "expo-web-browser": "~14.1.6",
-    "firebase": "^11.8.0",
+    "firebase": "^11.8.1",
+    "metro": "^0.82.4",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-native": "0.79.2",
@@ -41,7 +43,8 @@
     "react-native-storage": "^1.0.1",
     "react-native-web": "~0.20.0",
     "react-native-webview": "13.13.5",
-    "regenerator-runtime": "^0.14.1"
+    "regenerator-runtime": "^0.14.1",
+    "rneui": "^1.0.0-stable.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

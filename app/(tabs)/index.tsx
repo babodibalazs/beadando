@@ -1,23 +1,20 @@
-import Constants from "expo-constants";
 import { useEffect, useState } from "react";
 import { KeyboardAvoidingView, SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
 
-import Header from './components/Header';
-import Postbox from "./components/Postbox";
-import Posts from "./components/Posts";
+import Postbox from "../components/Postbox";
+import Posts from "../components/Posts";
 
 export default function Index() {
   const [posts, setPosts] = useState({})
 
   useEffect(() => {
-    setPosts(Constants.manifest)
+    setPosts("asd")
   }, [posts])
 
   return(
     <SafeAreaView>
       <KeyboardAvoidingView>
         <ScrollView>
-          <Header />
           <View style={styles.main}>
             <Postbox setPosts={setPosts} />
             <Posts posts={posts} />
